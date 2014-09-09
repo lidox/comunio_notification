@@ -10,5 +10,5 @@ import de.as.javabot.configuration.Configuration;
 
 public interface Bot {
 	public void setConfiguration(Configuration con);
-	public HtmlPage login() throws FailingHttpStatusCodeException, MalformedURLException, IOException;
+	public HtmlPage login(boolean mobile) throws FailingHttpStatusCodeException, MalformedURLException, IOException;
 }

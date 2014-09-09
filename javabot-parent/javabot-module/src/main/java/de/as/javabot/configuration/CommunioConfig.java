@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Properties;
+
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 
 
@@ -77,6 +78,11 @@ public class CommunioConfig implements Configuration{
 	@Override
 	public void setPassword(String psw) {
 		this.password = psw;
+	}
+
+	@Override
+	public String getLoginUrlMobile() {
+		return getValue("loginMobile");
 	}
 
 }

@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+
 import de.as.javabot.bots.CommunioClientBot;
 import de.as.javabot.configuration.CommunioConfig;
 import de.as.javabot.configuration.Configuration;
@@ -32,6 +34,17 @@ public class AccountInformationTest {
 		try {
 			String ret = bot.getTeamValue();
 			System.out.println("team: " +bot.getTeamValue());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testMobile1() {
+		try {
+			String ret = bot.getBankBalance();
+			System.out.println("so: "+ret);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

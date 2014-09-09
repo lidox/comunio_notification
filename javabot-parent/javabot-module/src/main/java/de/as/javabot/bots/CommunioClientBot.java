@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.ProxyConfig;
+import com.gargoylesoftware.htmlunit.ScriptResult;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
@@ -34,9 +36,16 @@ public class CommunioClientBot implements Bot{
         return getSection(page, "Standings");
 	}
 	
-	public String getTeamValue() throws IOException{
-		HtmlPage login = login();
+	public String getBankBalance() throws IOException{
+		HtmlPage login = login(true);
 		String results = login.asText();
+		return results;
+	}
+	
+	public String getTeamValue() throws IOException{
+		HtmlPage login = login(false);
+		String results = login.asText();
+		//System.out.println(login.getUrl());
 		return getTextRowAt(results, "Team value:");
 	}
 	
@@ -81,34 +90,53 @@ public class CommunioClientBot implements Bot{
 	 * @throws MalformedURLException
 	 * @throws IOException
 	 */
-	public HtmlPage login() throws FailingHttpStatusCodeException, MalformedURLException, IOException{
-		turnOffWarnings();
-//		BrowserVersion bv = new BrowserVersion("Chrome", "Mozilla/5.0", "Mozilla/5.0 (Windows NT 6.1) "
-//				+ "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1468.0 Safari/537.36", 28);
-		//Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko)
-		//Version/4.0 Mobile/7A341 Safari/528.16
-		webClient = getWebClient();
-		//TODO: klappt der login so? teste! 
-		proxyConfig = getProxyConfig();
-		HtmlPage page = getWebClient().getPage(config.getLoginUrl());
-		HtmlForm form = page.getFormByName("login");
-		HtmlTextInput textField1 = form.getInputByName("login");
-		textField1.setValueAttribute(config.getAccount());
-
-		HtmlPasswordInput passwordField4 = (HtmlPasswordInput) page
-				.getElementByName("pass");
-		passwordField4.setValueAttribute(config.getPassword());
-
-		List<HtmlAnchor> anchors2 = page.getAnchors();
+	public HtmlPage login(boolean mobile) throws FailingHttpStatusCodeException, MalformedURLException, IOException{
 		HtmlAnchor link = null;
-		for (HtmlAnchor anchor : anchors2) {
-			if (anchor.asText().indexOf(">> Login") > -1) {
-				link = anchor;
-				break;
-			}
+		turnOffWarnings();
+		webClient = getWebClient();
+		proxyConfig = getProxyConfig();
+		if(mobile){
+			webClient.addRequestHeader("User-Agent", "Mozilla/5.0 (iPhone; U; CPU iPhone OS 2_2 like Mac OS X; fr-fr)"
+					+ " AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5G77 Safari/525.20");
+			HtmlPage page = getWebClient().getPage(config.getLoginUrlMobile());
+			HtmlForm form = page.getForms().get(0);
+			HtmlTextInput textField1 = form.getInputByName("username");
+			textField1.setValueAttribute(config.getAccount());
+			HtmlPasswordInput passwordField4 = (HtmlPasswordInput) page.getElementByName("password");
+			passwordField4.setValueAttribute(config.getPassword());
+			//System.out.println(page.asText());
+			link = (HtmlAnchor) page.querySelector("a.whiteButton");
+			
+			//TODO: hier ist eine groﬂe Baustelle
+//			webClient.waitForBackgroundJavaScript(10000);
+//			webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+//			webClient.waitForBackgroundJavaScriptStartingBefore(10000);
+//		    //String javaScriptCode = "document.getElementById('frmLogin').submit();";
+//		    ScriptResult result = page.executeJavaScript(link.getOnClickAttribute());
+//		    HtmlPage lol = (HtmlPage) result.getNewPage();
+//		    System.out.println(lol.asText());
+//		    System.out.println();
+			return link.click();
 		}
-		//logger.info("Info: Login war erfolgreich!");
-		return link.click();
+		else{
+			HtmlPage page = getWebClient().getPage(config.getLoginUrl());
+			HtmlForm form = page.getFormByName("login");
+			HtmlTextInput textField1 = form.getInputByName("login");
+			textField1.setValueAttribute(config.getAccount());
+
+			HtmlPasswordInput passwordField4 = (HtmlPasswordInput) page
+					.getElementByName("pass");
+			passwordField4.setValueAttribute(config.getPassword());
+			List<HtmlAnchor> anchors2 = page.getAnchors();
+			for (HtmlAnchor anchor : anchors2) {
+				if (anchor.asText().indexOf(">> Login") > -1) {
+					link = anchor;
+					break;
+				}
+			}
+			return link.click();
+		}
+		
 	}
 
 	private void turnOffWarnings() {
@@ -123,8 +151,6 @@ public class CommunioClientBot implements Bot{
 			return webClient;
 		}
 		WebClient client = new WebClient();
-		client.addRequestHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) "
-				+ "Chrome/28.0.1468.0 Safari/537.36");
 	    client.setTimeout(60000);
 	    client.setRedirectEnabled(true);
 	    client.setJavaScriptEnabled(true);
