@@ -1,0 +1,32 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>javabot-parent</groupId>
+	<artifactId>javabot-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<modules>
+		<module>javabot-webservice</module>
+		<module>javabot-module</module>
+		<module>javabot-webarchive</module>
+	</modules>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>javabot-parent</groupId>
+				<artifactId>javabot-webservice</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>javabot-parent</groupId>
+				<artifactId>javabot-module</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>javabot-parent</groupId>
+				<artifactId>javabot-webarchive</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<type>war</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
