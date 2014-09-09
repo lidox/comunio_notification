@@ -1,6 +1,10 @@
 package de.as.javabot.web.test;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
+
+import javax.validation.constraints.AssertFalse;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -41,12 +45,27 @@ public class AccountInformationTest {
 	}
 	
 	@Test
-	public void testMobile1() {
+	public void testMobileKontostand1() {
 		try {
 			String ret = bot.getBankBalance();
-			System.out.println("so: "+ret);
+			assertTrue("Kontostand beinhaltet ein Eurozeichen", ret.contains("€"));
+			System.out.println("Kontostand: "+ret);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			fail("Excetion!");
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void test2() {
+		try {
+			HtmlPage ret;// = bot.login(true);
+			ret = bot.getTeamFormation();
+			String res = ret.asText();
+			//assertTrue("Kontostand beinhaltet ein Eurozeichen", ret.contains("€"));
+			System.out.println("Aufstellung: "+res);
+		} catch (IOException e) {
+			fail("Excetion!");
 			e.printStackTrace();
 		}
 	}
