@@ -1,4 +1,4 @@
 javabot
 =======
 
-Log in on a website without browser
+Bot for communio.de
