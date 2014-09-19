@@ -1,12 +1,11 @@
 package de.as.javabot.web.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Scanner;
 
-import javax.validation.constraints.AssertFalse;
-
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -34,12 +33,13 @@ public class AccountInformationTest {
 	}
 	
 	@Test
-	public void test() {
+	public void testTeamValue1() {
 		try {
 			String ret = bot.getTeamValue();
-			System.out.println("team: " +bot.getTeamValue());
+			//System.out.println("team: " +bot.getTeamValue());
+			assertTrue("Mannschaftswert beinhaltet ein Eurozeichen", ret.contains("€"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			fail("Excetion!");
 			e.printStackTrace();
 		}
 	}
@@ -49,7 +49,7 @@ public class AccountInformationTest {
 		try {
 			String ret = bot.getBankBalance();
 			assertTrue("Kontostand beinhaltet ein Eurozeichen", ret.contains("€"));
-			System.out.println("Kontostand: "+ret);
+			//System.out.println("Kontostand: "+ret);
 		} catch (IOException e) {
 			fail("Excetion!");
 			e.printStackTrace();
@@ -57,13 +57,28 @@ public class AccountInformationTest {
 	}
 	
 	@Test
-	public void test2() {
+	public void testGetAufstellung() {
 		try {
+			StringBuilder aufstellung=new StringBuilder();
 			HtmlPage ret;// = bot.login(true);
 			ret = bot.getTeamFormation();
-			String res = ret.asText();
-			//assertTrue("Kontostand beinhaltet ein Eurozeichen", ret.contains("€"));
-			System.out.println("Aufstellung: "+res);
+			String res = ret.asXml();
+			
+			int start = res.indexOf("<div style=\"width:px;height:px;background-image:url");
+			int end = res.indexOf("Aufstellung bestätigen");
+			StringBuilder information = new StringBuilder(res.substring(start, end));
+			//System.out.println(information.toString());
+			Scanner sc = new Scanner(information.toString());
+			while (sc.hasNextLine()) {
+				String line = sc.nextLine().trim();
+				if(!line.contains("<") && !line.equals("")){
+					//System.out.println(line);
+					aufstellung.append("Spieler: "+ line +"\n");
+				}
+			}
+			sc.close();
+			//System.out.println(aufstellung);
+			assertTrue(aufstellung.toString().contains("Spieler"));
 		} catch (IOException e) {
 			fail("Excetion!");
 			e.printStackTrace();

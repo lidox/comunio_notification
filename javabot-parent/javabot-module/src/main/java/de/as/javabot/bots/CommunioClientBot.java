@@ -2,7 +2,6 @@ package de.as.javabot.bots;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,6 +13,7 @@ import com.gargoylesoftware.htmlunit.ProxyConfig;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlButton;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
@@ -35,7 +35,19 @@ public class CommunioClientBot implements Bot {
 	public HtmlPage getTeamFormation() throws IOException {
 		HtmlPage teamFormation = login(true);
 		//TODO: its hardcoded for now
-		teamFormation = getWebClient().getPage("http://m.comunio.de/li3/1410269933ZulsA5aDdAHQY2KCZ16174fc73a3146b301714500f662c631");
+		String standigsLink = "http://m.comunio.de/li3/";
+		List<HtmlElement> spans = teamFormation.getElementsByTagName("a");
+		for (HtmlElement element : spans) {
+			//System.out.println("a tag: "+element.getAttribute("href"));
+			List<HtmlElement> img = element.getElementsByTagName("img");
+			for (HtmlElement link : img) {
+			    if (link.getAttribute("alt").equals("Eigene Aufstellung")) {	
+			        //System.out.println("gefunden: "+element.getAttribute("href")); 
+			    	standigsLink = element.getAttribute("href");
+			    }
+			}
+		}
+		teamFormation = getWebClient().getPage(standigsLink);
 		return teamFormation;
 	}
 	
@@ -58,7 +70,7 @@ public class CommunioClientBot implements Bot {
 	public String getBankBalance() throws IOException {
 		HtmlPage login = login(true);
 		String results = login.asText();
-		System.out.println(results);
+		//System.out.println(results);
 		return getTextRowContaining(results, "€");
 	}
 
