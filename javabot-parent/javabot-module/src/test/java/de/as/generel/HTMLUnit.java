@@ -88,83 +88,83 @@ public class HTMLUnit {
 //	    webClient.closeAllWindows();
 //	}
 	
-	@Test
-	public void test(){
-        HtmlPage page = null;
-        boolean savePagesLocally = false;
-        String url = "http://www.comunio.de/login";
-
-        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
-        webClient.setThrowExceptionOnScriptError(false);
-
-        String savePagesLocallyString = System.getProperty("savePagesLocally");
-        if(savePagesLocallyString != null )
-        { savePagesLocally = Boolean.valueOf(savePagesLocallyString); }
-
-        int pageNum = 1;
-        String localFilePath = null;
-
-        try
-        {
-             page = webClient.getPage( url );
-
-             System.out.println("Current page: Comunio.de Login");
-
-             // Current page:
-             // Title=Comunio.de Login
-             // URL=http://www.comunio.de/login
-
-             HtmlTextInput textField1 = (HtmlTextInput) page.getElementByName("login");
-             textField1.setValueAttribute("lidox");
-
-             HtmlPasswordInput passwordField4 = (HtmlPasswordInput) page.getElementByName("pass");
-             passwordField4.setValueAttribute("lidox");
-
-             List<HtmlAnchor> anchors2 =  page.getAnchors();
-             HtmlAnchor link3 = null;
-             for(HtmlAnchor anchor: anchors2)
-             {
-                  if(anchor.asText().indexOf(">> Login") > -1 )
-                  {
-                       link3 = anchor;
-                       break;
-                  }
-             }
-             page = link3.click();
-
-             System.out.println("Current page: Team lineup of artur");
-
-             // Current page:
-             // Title=Team lineup of artur
-             // URL=http://www.comunio.de/lineup.phtml
-
-
-
-             System.out.println("Test has completed successfully");
-        }
-        catch ( FailingHttpStatusCodeException e1 )
-        {
-             System.out.println( "FailingHttpStatusCodeException thrown:" + e1.getMessage() );
-             e1.printStackTrace();
-
-        }
-        catch ( MalformedURLException e1 )
-        {
-             System.out.println( "MalformedURLException thrown:" + e1.getMessage() );
-             e1.printStackTrace();
-
-        }
-        catch ( IOException e1 )
-        {
-             System.out.println( "IOException thrown:" + e1.getMessage() );
-             e1.printStackTrace();
-
-        }
-        catch( Exception e )
-        {
-       e.printStackTrace();
-        }
-   }
+//	@Test
+//	public void test(){
+//        HtmlPage page = null;
+//        boolean savePagesLocally = false;
+//        String url = "http://www.comunio.de/login";
+//
+//        WebClient webClient = new WebClient(BrowserVersion.FIREFOX_3_6);
+//        webClient.setThrowExceptionOnScriptError(false);
+//
+//        String savePagesLocallyString = System.getProperty("savePagesLocally");
+//        if(savePagesLocallyString != null )
+//        { savePagesLocally = Boolean.valueOf(savePagesLocallyString); }
+//
+//        int pageNum = 1;
+//        String localFilePath = null;
+//
+//        try
+//        {
+//             page = webClient.getPage( url );
+//
+//             System.out.println("Current page: Comunio.de Login");
+//
+//             // Current page:
+//             // Title=Comunio.de Login
+//             // URL=http://www.comunio.de/login
+//
+//             HtmlTextInput textField1 = (HtmlTextInput) page.getElementByName("login");
+//             textField1.setValueAttribute("lidox");
+//
+//             HtmlPasswordInput passwordField4 = (HtmlPasswordInput) page.getElementByName("pass");
+//             passwordField4.setValueAttribute("lidox");
+//
+//             List<HtmlAnchor> anchors2 =  page.getAnchors();
+//             HtmlAnchor link3 = null;
+//             for(HtmlAnchor anchor: anchors2)
+//             {
+//                  if(anchor.asText().indexOf(">> Login") > -1 )
+//                  {
+//                       link3 = anchor;
+//                       break;
+//                  }
+//             }
+//             page = link3.click();
+//
+//             System.out.println("Current page: Team lineup of artur");
+//
+//             // Current page:
+//             // Title=Team lineup of artur
+//             // URL=http://www.comunio.de/lineup.phtml
+//
+//
+//
+//             System.out.println("Test has completed successfully");
+//        }
+//        catch ( FailingHttpStatusCodeException e1 )
+//        {
+//             System.out.println( "FailingHttpStatusCodeException thrown:" + e1.getMessage() );
+//             e1.printStackTrace();
+//
+//        }
+//        catch ( MalformedURLException e1 )
+//        {
+//             System.out.println( "MalformedURLException thrown:" + e1.getMessage() );
+//             e1.printStackTrace();
+//
+//        }
+//        catch ( IOException e1 )
+//        {
+//             System.out.println( "IOException thrown:" + e1.getMessage() );
+//             e1.printStackTrace();
+//
+//        }
+//        catch( Exception e )
+//        {
+//       e.printStackTrace();
+//        }
+//   }
 	
 
 }

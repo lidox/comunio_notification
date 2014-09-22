@@ -10,4 +10,5 @@ public interface Configuration {
 	  public String getPassword();
 	  public void setAccount(String acc);
 	  public void setPassword(String psw);
+	  public boolean isProxyActive();
 }

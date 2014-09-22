@@ -1,27 +1,34 @@
 package de.as.javabot.web.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.ArrayList;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.quartz.SchedulerException;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
+import de.as.javabot.batch.Trigger2;
+import de.as.javabot.batch.jobs.GetInjuredPlayersJob;
 import de.as.javabot.bots.CommunioClientBot;
+import de.as.javabot.comunio.ComunioPlayer;
 import de.as.javabot.configuration.CommunioConfig;
 import de.as.javabot.configuration.Configuration;
 
+@Ignore
 public class AccountInformationTest {
 
 	static Configuration config;
 	static CommunioClientBot bot;
-	
+	static long startTime;
 	@BeforeClass
 	public static void setUp(){
+		startTime = System.currentTimeMillis();
 		config = new CommunioConfig();
 		config.setAccount("lidox");
 		config.setPassword("lidox");	
@@ -30,6 +37,12 @@ public class AccountInformationTest {
 		
 //		TLSEmail s = new TLSEmail();		
 //		s.doMail("lidox" +" " + "lidox");
+	}
+	
+	@AfterClass
+	public static void tearDown(){
+		long time = System.currentTimeMillis() - startTime;
+		System.out.println("Ausführungszeit: " +time/1000.0 + " s");
 	}
 	
 	@Test
@@ -54,35 +67,34 @@ public class AccountInformationTest {
 			fail("Excetion!");
 			e.printStackTrace();
 		}
+	}	
+	
+	@Test
+	public void testGetTeamList1() {
+		ArrayList<ComunioPlayer> ret = bot.getTeamFormationAsList();
+		assertEquals("Anzahl der spieler muss elf sein",11,ret.size());
 	}
 	
 	@Test
-	public void testGetAufstellung() {
-		try {
-			StringBuilder aufstellung=new StringBuilder();
-			HtmlPage ret;// = bot.login(true);
-			ret = bot.getTeamFormation();
-			String res = ret.asXml();
-			
-			int start = res.indexOf("<div style=\"width:px;height:px;background-image:url");
-			int end = res.indexOf("Aufstellung bestätigen");
-			StringBuilder information = new StringBuilder(res.substring(start, end));
-			//System.out.println(information.toString());
-			Scanner sc = new Scanner(information.toString());
-			while (sc.hasNextLine()) {
-				String line = sc.nextLine().trim();
-				if(!line.contains("<") && !line.equals("")){
-					//System.out.println(line);
-					aufstellung.append("Spieler: "+ line +"\n");
-				}
+	public void testGetVerletzteSpieler1() {
+		ArrayList<ComunioPlayer> ret = bot.getTeamFormationAsList();
+		ArrayList<ComunioPlayer> injured = new ArrayList<ComunioPlayer>();
+		for (ComunioPlayer item : ret) {
+			if(!item.getStatus().contains("aktiv")){
+				injured.add(item);
 			}
-			sc.close();
-			//System.out.println(aufstellung);
-			assertTrue(aufstellung.toString().contains("Spieler"));
-		} catch (IOException e) {
-			fail("Excetion!");
-			e.printStackTrace();
 		}
+		System.out.println(injured.toString());
+		assertEquals("Anzahl der spieler muss elf sein",11,ret.size());
 	}
+	
+//	@Test
+//	public void testSchedule1() throws SchedulerException {
+//		Trigger2 t = new Trigger2();
+//		t.startTrigger();
+//		//t.stopTrigger();
+//	}
+	
+	
 
 }

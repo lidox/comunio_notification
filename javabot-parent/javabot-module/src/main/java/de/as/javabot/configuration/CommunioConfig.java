@@ -26,7 +26,14 @@ public class CommunioConfig implements Configuration{
 		return getValue("proxy");
 	}
 
-
+	public boolean isProxyActive() {
+		try {
+			return Boolean.parseBoolean(getValue("activate_proxy"));
+		} catch (Exception e) {
+			return false;
+		}
+	}
+	
 	public int getPort() {
 		try {
 			return Integer.parseInt( getValue("port"));

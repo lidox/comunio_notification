@@ -2,9 +2,11 @@ package de.as.javabot.bots;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +21,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlPasswordInput;
 import com.gargoylesoftware.htmlunit.html.HtmlTextInput;
 
+import de.as.javabot.comunio.ComunioPlayer;
 import de.as.javabot.configuration.Configuration;
 
 public class CommunioClientBot implements Bot {
@@ -34,43 +37,40 @@ public class CommunioClientBot implements Bot {
 
 	public HtmlPage getTeamFormation() throws IOException {
 		HtmlPage teamFormation = login(true);
-		//TODO: its hardcoded for now
 		String standigsLink = "http://m.comunio.de/li3/";
 		List<HtmlElement> spans = teamFormation.getElementsByTagName("a");
 		for (HtmlElement element : spans) {
-			//System.out.println("a tag: "+element.getAttribute("href"));
 			List<HtmlElement> img = element.getElementsByTagName("img");
 			for (HtmlElement link : img) {
-			    if (link.getAttribute("alt").equals("Eigene Aufstellung")) {	
-			        //System.out.println("gefunden: "+element.getAttribute("href")); 
-			    	standigsLink = element.getAttribute("href");
-			    }
+				if (link.getAttribute("alt").equals("Eigene Aufstellung")) {
+					standigsLink = element.getAttribute("href");
+				}
 			}
 		}
 		teamFormation = getWebClient().getPage(standigsLink);
 		return teamFormation;
 	}
-	
+
 	public HtmlPage getStandings(HtmlPage page) throws IOException {
 		return getSection(page, "Standings");
 	}
 
-//	public ArrayList<String> getInjuredPlayers(){
-//		ArrayList<String> ret = new ArrayList<String>();
-//		Scanner scanner = new Scanner(text);
-//			while (scanner.hasNextLine()) {
-//				String row = scanner.nextLine();
-//				if (row.startsWith(line)) {
-//					return row.substring(line.length()).trim();
-//				}
-//			}
-//			scanner.close();
-//	}
-	
+	// public ArrayList<String> getInjuredPlayers(){
+	// ArrayList<String> ret = new ArrayList<String>();
+	// Scanner scanner = new Scanner(text);
+	// while (scanner.hasNextLine()) {
+	// String row = scanner.nextLine();
+	// if (row.startsWith(line)) {
+	// return row.substring(line.length()).trim();
+	// }
+	// }
+	// scanner.close();
+	// }
+
 	public String getBankBalance() throws IOException {
 		HtmlPage login = login(true);
 		String results = login.asText();
-		//System.out.println(results);
+		// System.out.println(results);
 		return getTextRowContaining(results, "€");
 	}
 
@@ -93,8 +93,7 @@ public class CommunioClientBot implements Bot {
 		scanner.close();
 		return "Error! There is no result for: " + line;
 	}
-	
-	
+
 	@SuppressWarnings("resource")
 	private String getTextRowContaining(String text, String line) {
 		Scanner scanner = new Scanner(text);
@@ -120,7 +119,7 @@ public class CommunioClientBot implements Bot {
 		List<HtmlAnchor> anchors = page.getAnchors();
 		HtmlAnchor link = null;
 		for (HtmlAnchor anchor : anchors) {
-			//System.out.println(anchor.asText());
+			// System.out.println(anchor.asText());
 			if (anchor.asText().indexOf(sectionName) > -1) {
 				link = anchor;
 				break;
@@ -143,7 +142,11 @@ public class CommunioClientBot implements Bot {
 		HtmlAnchor link = null;
 		turnOffWarnings();
 		webClient = getWebClient();
-		proxyConfig = getProxyConfig();
+		
+		if(config.isProxyActive()){
+			proxyConfig = getProxyConfig(); 
+		}
+		
 		if (mobile) {
 			webClient
 					.addRequestHeader(
@@ -157,8 +160,8 @@ public class CommunioClientBot implements Bot {
 			HtmlPasswordInput passwordField4 = (HtmlPasswordInput) page
 					.getElementByName("password");
 			passwordField4.setValueAttribute(config.getPassword());
-			
-			//link = (HtmlAnchor) page.querySelector("a.whiteButton");
+
+			// link = (HtmlAnchor) page.querySelector("a.whiteButton");
 
 			// Workaround: create a 'fake' button and add it to the form
 			HtmlButton submitButton = (HtmlButton) page.createElement("button");
@@ -220,6 +223,85 @@ public class CommunioClientBot implements Bot {
 
 	public void setConfiguration(Configuration con) {
 		this.config = con;
+	}
+
+	public static String getValueByEdges(StringBuilder builder,
+			String beginningEdge, String endEdge) {
+		if (builder.toString().contains(beginningEdge)) {
+			int i = builder.indexOf(beginningEdge) + beginningEdge.length();
+			int k = builder.indexOf(endEdge);
+			return builder.toString().substring(i, k);
+		}
+		return "There was no value for this edge";
+	}
+
+	public ArrayList<ComunioPlayer> getTeamFormationAsList() {
+		ArrayList<ComunioPlayer> players = new ArrayList<ComunioPlayer>();
+		try {
+			HtmlPage ret = login(true);
+			ret = getTeamFormation();
+			String res = ret.asXml();
+
+			int start = res
+					.indexOf("<div style=\"width:px;height:px;background-image:url");
+			int end = res.indexOf("Aufstellung bestätigen");
+			StringBuilder information = new StringBuilder(res.substring(start,
+					end));
+
+			String searchPattern = "<td align=\"center\" valign=\"bottom\">";
+			int playerCount = StringUtils.countMatches(information.toString(),
+					searchPattern);
+
+			int startPattern = 0;
+			int endPattern = 0;
+			for (int i = 0; i < playerCount; i++) {
+				startPattern = information.indexOf(searchPattern, startPattern);
+				endPattern = information.indexOf("</td>", startPattern);
+				StringBuilder aPlayer = new StringBuilder(
+						information.substring(startPattern, endPattern));
+				String playerName = getValueByEdges(aPlayer,
+						"height:20px;line-height:10px;\">", "</div>").trim();
+				String weblink = getValueByEdges(aPlayer, "<a href=\"",
+						"\" style").trim();
+				String position = "";
+				if (weblink.contains("striker")) {
+					position = "im Sturm";
+				} else if (weblink.contains("midfielder")) {
+					position = "im Mittelfeld";
+				} else if (weblink.contains("defender")) {
+					position = "in der Abwehr";
+				} else if (weblink.contains("keeper")) {
+					position = "im Tor";
+				}
+				String isInjured = getValueByEdges(aPlayer, "color:", ";\">")
+						.trim();
+				String status = "aktiv";
+				if (!isInjured.equals("#eeeeee")) {
+					status = "verletzt";
+				}
+				ComunioPlayer p = new ComunioPlayer();
+				p.setName(playerName);
+				p.setWeblink(weblink);
+				p.setStatus(status);
+				p.setPosition(position);
+				players.add(p);
+				startPattern = endPattern;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return players;
+	}
+
+	public ArrayList<ComunioPlayer> getInjuredPlayer() {
+		ArrayList<ComunioPlayer> ret = getTeamFormationAsList();
+		ArrayList<ComunioPlayer> injured = new ArrayList<ComunioPlayer>();
+		for (ComunioPlayer item : ret) {
+			if(!item.getStatus().contains("aktiv")){
+				injured.add(item);
+			}
+		}
+		return injured;
 	}
 
 }
