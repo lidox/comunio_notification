@@ -35,14 +35,16 @@ public class Trigger2 {
 
 	}
 
-	public static void unscheduleJob(String triggerName, String groupName) {
+	public static String unscheduleJob(String triggerName, String groupName) {
 		try {
 			scheduler.unscheduleJob(TriggerKey.triggerKey(triggerName,
 					groupName));
 			System.out.println("############### STOPPED #################");
+			return "Die tägliche Service Mail an: "+triggerName+" wurde deaktiviert!";
 		} catch (SchedulerException e) {
 			System.out.println("Job not found");
 			e.printStackTrace();
+			return e.getMessage();
 		}
 	}
 
@@ -68,26 +70,33 @@ public class Trigger2 {
 		scheduler.scheduleJob(job, trigger);
 	}
 
-	public static void startDailyTrigger(String triggerName, String groupName, String login, String psw, int h, int m) throws SchedulerException{
-	    // define the job and tie it to our HelloJob class
-	    JobDetail job = JobBuilder.newJob(GetInjuredPlayersJob.class)
-	        .withIdentity("job1", "group1")
-	        .build();
-	    
-	    job.getJobDataMap().put("login", login);
-	    job.getJobDataMap().put("password", psw);
+	public static String startDailyTrigger(String triggerName,
+			String groupName, String login, String psw, int h, int m, String mail)
+			 {
+		try {
+			// define the job and tie it to our HelloJob class
+			JobDetail job = JobBuilder.newJob(GetInjuredPlayersJob.class)
+					.withIdentity("job1", "group1").build();
 
-	    // Trigger the job to run now, and then repeat every 40 seconds
-	    Trigger trigger = TriggerBuilder.newTrigger()
-	    	        .withIdentity(triggerName, groupName)
-	    	        .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(h,m))
-	    	        .forJob("job1",groupName)
-	    	        .build();
-	    	    //.withSchedule(CronScheduleBuilder.cronSchedule("0 6 15 * * ?")) //"0 29 5 ? * MON-SUN"  
-//	    	    .forJob("job1", "group1")
-//	    	    .build();
+			job.getJobDataMap().put("login", login);
+			job.getJobDataMap().put("password", psw);
+			job.getJobDataMap().put("email", mail);
 
+			// Trigger the job to run now, and then repeat every 40 seconds
+			Trigger trigger = TriggerBuilder
+					.newTrigger()
+					.withIdentity(triggerName, groupName)
+					.withSchedule(
+							CronScheduleBuilder.dailyAtHourAndMinute(h, m))
+					.forJob("job1", groupName).build();
 
-	    scheduler.scheduleJob(job, trigger);	            
+			scheduler.scheduleJob(job, trigger);
+			String stunde = "";
+			String minute = "";
+			return "Du bekommst jeden Tag eine Mail um "+h+":"+m+ " Uhr.";
+		}catch (SchedulerException e3) {
+			return e3.getMessage();
+		}
+
 	}
 }

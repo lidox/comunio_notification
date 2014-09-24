@@ -287,10 +287,11 @@ public class CommunioClientBot implements Bot {
 				players.add(p);
 				startPattern = endPattern;
 			}
+			return players;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return players;
+		return null;
 	}
 
 	public ArrayList<ComunioPlayer> getInjuredPlayer() {

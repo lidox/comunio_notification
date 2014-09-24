@@ -33,22 +33,28 @@ public class GetInjuredPlayersJob implements Job{
 			
 			ArrayList<ComunioPlayer> list = bot.getInjuredPlayer();
 			StringBuilder msg = new StringBuilder();
-			msg.append(""+"\n");
-			msg.append("Benutzer: "+getParam(context, "login") +"\n");
+			msg.append(" "+getParam(context, "login") +","+"\n");
 			
-			if(list.size()>0){
-				msg.append("Folgende Spieler sind verletzt und in der Startaufstellung:" +"\n");
+			if(list==null){
+				msg.append("Leider ist beim Einloggen auf www.comunio.de ein Fehler aufgetretten "+ "\n");
+				msg.append("Deswegen liegen keine Informationen über deine Spieler vor."+ "\n");
+				msg.append("Morgen bekommst du deine Info's dann hoffentlich :)"+ "\n");
+			}
+			else if(list.size()>0){
+				msg.append("\n"+"es sind folgende Spieler verletzt und in der Startaufstellung:" +"\n");
+				int i = 1;
 				for (ComunioPlayer p : list) {
-					msg.append(p.getName() + " ist verletzt und aufgestellt "+p.getPosition() +"\n");
+					msg.append(i+". "+p.getName() + " ist verletzt "+p.getPosition() +"."+"\n");
+					i++;
 				}
 			}
 			else{
-				msg.append("In der Startaufstellung hast du keinen verletzten Spieler! :)");
+				msg.append("In der Startaufstellung hast du keinen verletzten Spieler! :)"+ "\n");
 			}
 			
 			try {
 				TLSEmail s = new TLSEmail();		
-				s.doMail(msg.toString());
+				s.doMail(msg.toString(),getParam(context, "email"));
 			} catch (Exception e) {/*muhaha kann passiert sollte aber nicht*/
 				System.out.println("mail nicht versendet");
 			}

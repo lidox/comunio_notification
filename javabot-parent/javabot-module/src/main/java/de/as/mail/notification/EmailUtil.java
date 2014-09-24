@@ -44,6 +44,7 @@ public class EmailUtil {
         }
         catch (Exception e) {
         	System.out.println("Failure! E-Mail not sent!");
+        	e.printStackTrace();
         }
     }
 }

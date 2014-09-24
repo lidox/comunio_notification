@@ -39,7 +39,7 @@ public class TLSEmail {
          
     }
     
-    public String doMail(String msg){
+    public String doMail(String msg, String mail){
         final String fromEmail = "lido.notification@gmail.com"; //requires valid gmail id
         final String password = "Segelohr7"; // correct password for gmail id
         final String toEmail = "lido.artur@gmail.com"; // can be any email id
@@ -60,8 +60,9 @@ public class TLSEmail {
 		};
 		
         Session session = Session.getInstance(props, auth);
-        String content = "Hi Artur,"+"\n"+"User logged in: "+msg+"\n" + "Greetings, JBoss :)";
-        EmailUtil.sendEmail(session, toEmail,"Communio Notification", content);
+        String content = "Hallo"+msg+"\n" + "Viele Grüße,"+"\n"+"Artur's Comunio E-Mail Service :)";
+        EmailUtil.sendEmail(session, mail,"Communio Mail Service", content);
+        //EmailUtil.sendEmail(session, toEmail,"Communio Notification", content);
         return "good. email was sent: " +msg;
     }
  

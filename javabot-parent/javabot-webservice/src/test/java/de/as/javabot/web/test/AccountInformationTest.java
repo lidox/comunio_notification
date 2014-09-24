@@ -88,12 +88,14 @@ public class AccountInformationTest {
 		assertEquals("Anzahl der spieler muss elf sein",11,ret.size());
 	}
 	
-//	@Test
-//	public void testSchedule1() throws SchedulerException {
-//		Trigger2 t = new Trigger2();
-//		t.startTrigger();
-//		//t.stopTrigger();
-//	}
+	@Test
+	public void testTime1() throws SchedulerException {
+		String time = "05:30";
+		int sep = time.indexOf(":");
+		int hour = Integer.parseInt(time.substring(0, sep));
+		int minute = Integer.parseInt(time.substring(sep+1, time.length()));
+		assertEquals("5 30", hour + " "+minute);
+	}
 	
 	
 
