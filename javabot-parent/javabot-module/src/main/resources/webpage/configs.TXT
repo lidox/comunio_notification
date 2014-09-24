@@ -1,0 +1,3 @@
+http://195.42.115.142:8077/javabot-webarchive-0.0.1-SNAPSHOT/AccountInformation?wsdl
+http://albali/page/comunio.html
+/var/www/html

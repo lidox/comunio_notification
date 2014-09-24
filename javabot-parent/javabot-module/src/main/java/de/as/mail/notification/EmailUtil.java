@@ -40,7 +40,8 @@ public class EmailUtil {
           System.out.println("Message is ready");
           Transport.send(msg); 
  
-          System.out.println("EMail Sent Successfully!!");
+          System.out.println("E-Mail sent successfully to "+toEmail+".");
+          System.out.println("Message: " +msg);
         }
         catch (Exception e) {
         	System.out.println("Failure! E-Mail not sent!");

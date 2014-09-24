@@ -60,7 +60,7 @@ public class AccountInformation {
 
 			if (list.size() > 0) {
 				msg.append("Folgende Spieler sind verletzt und in der Startaufstellung:"
-						+ "\n");
+						+ "\n" + "\n");
 				int i = 1;
 				for (ComunioPlayer p : list) {
 					msg.append(i + ". " + p.getName() + " auf der Position "+ p.getPosition() + "\n");
