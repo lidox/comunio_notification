@@ -6,7 +6,6 @@ import javax.ejb.Startup;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
-import org.quartz.ScheduleBuilder;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.SimpleScheduleBuilder;
@@ -17,8 +16,8 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import de.as.javabot.batch.jobs.GetInjuredPlayersJob;
 
-@Singleton
-@Startup
+//@Singleton
+//@Startup
 public class Trigger2 {
 
 	private static Scheduler scheduler;
@@ -32,7 +31,6 @@ public class Trigger2 {
 			System.out.println("Schedular not started!");
 			e.printStackTrace();
 		}
-
 	}
 
 	public static String unscheduleJob(String triggerName, String groupName) {

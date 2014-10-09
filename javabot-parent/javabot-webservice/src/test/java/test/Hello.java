@@ -11,7 +11,6 @@ import javax.jws.WebService;
         endpointInterface = "test.IHelloService")
 public class Hello implements IHelloService{
 
-	@Override
 	public String hello(String whom) {
 		return "Hello "+whom;
 	}

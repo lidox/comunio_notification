@@ -77,17 +77,14 @@ public class CommunioConfig implements Configuration{
 		}
 	}
 
-	@Override
 	public void setAccount(String acc) {
 		this.account = acc;
 	}
 
-	@Override
 	public void setPassword(String psw) {
 		this.password = psw;
 	}
 
-	@Override
 	public String getLoginUrlMobile() {
 		return getValue("loginMobile");
 	}

@@ -38,13 +38,23 @@
 			<artifactId>quartz</artifactId>
 			<version>2.2.1</version>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>org.apache.openejb</groupId>
 			<artifactId>openejb-api</artifactId>
 			<version>4.6.0</version>
 		</dependency>
-
 		<dependency>
+			<groupId>org.apache.openjpa</groupId>
+			<artifactId>openjpa</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.4.0</version>
+			<scope>compile</scope>
+		</dependency>
+				<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>

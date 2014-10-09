@@ -1,6 +1,6 @@
 package de.as.javabot.comunio;
 
-public class ComunioPlayer implements Player {
+public class ComunioPlayer implements IPlayer {
 
 	private String name;
 	private String club;
@@ -49,7 +49,6 @@ public class ComunioPlayer implements Player {
 	private String weblink;
 	public static final String unkown = "unknown information";
 	
-	@Override
 	public String getName() {
 		if(name!=null){
 			return name;
@@ -57,7 +56,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getClub() {
 		if(club!=null){
 			return club;
@@ -65,7 +63,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getPosition() {
 		if(position!=null){
 			return position;
@@ -73,7 +70,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getMarketValue() {
 		if(marketValue!=null){
 			return marketValue;
@@ -81,7 +77,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getPoints() {
 		if(points!=null){
 			return points;
@@ -89,7 +84,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getStatus() {
 		if(status!=null){
 			return status;
@@ -97,7 +91,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getPhotoWebLink() {
 		if(photoWebLink!=null){
 			return photoWebLink;
@@ -105,7 +98,6 @@ public class ComunioPlayer implements Player {
 		return unkown;
 	}
 
-	@Override
 	public String getComunioPlayerPage() {
 		if(weblink!=null){
 			return weblink;
