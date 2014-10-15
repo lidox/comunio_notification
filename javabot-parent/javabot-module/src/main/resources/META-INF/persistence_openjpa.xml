@@ -1,0 +1,21 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
+
+	<persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
+		<class>de.as.javabot.comunio.entity.User2</class>
+		<class>de.as.javabot.comunio.User</class>
+		
+		<properties>
+			<property name="openjpa.ConnectionUserName" value="com" />
+			<property name="openjpa.ConnectionPassword" value="com" />
+			<property name="openjpa.ConnectionURL" value="jdbc:mysql://127.0.0.1/comunio" />
+			<property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver" />
+			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
+			<property name="openjpa.Log" value="SQL=TRACE" />
+			<property name="openjpa.ConnectionFactoryProperties" value="printParameters=true" />
+			<property name="openjpa.jdbc.MappingDefaults"
+				value="ForeignKeyDeleteAction=restrict,JoinForeignKeyDeleteAction=restrict" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

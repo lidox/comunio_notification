@@ -15,4 +15,7 @@ public interface IComunioWS {
 			@WebParam(name = "zeit") String time,
 			@WebParam(name = "activate") boolean activate);
 	
+	@WebMethod
+	public String doit(String s);
+	
 }

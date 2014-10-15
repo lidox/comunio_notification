@@ -15,6 +15,7 @@ import de.as.javabot.batch.JobExecuter;
 import de.as.javabot.batch.TriggerDaily;
 import de.as.javabot.batch.TriggerPeriod;
 import de.as.javabot.comunio.User;
+import de.as.javabot.comunio.User2;
 import de.as.javabot.report.Report;
 import de.as.javabot.report.ReportViaEmail;
 import de.as.javabot.web.interfaces.IComunioWS;
@@ -45,20 +46,20 @@ public class ComunioService implements IComunioWS {
 	
 	@WebMethod
 	public String doit(String s){
-//		java.util.Map<Object,Object> map = new java.util.HashMap<Object,Object>();
-//		EntityManagerFactory factory = Persistence.createEntityManagerFactory("testPU", map);
-//		EntityManager em = factory.createEntityManager();
-//		em.getTransaction().begin();
-//		// we'll put some codes here later
-//		User u = new User();
-//		
-//		u.setLogin("junit-user");
-//		u.setPassword("top secret");
-//		em.persist(u);
-//		//
-//		em.getTransaction().commit();
-//		em.close();
-//		factory.close();
+		java.util.Map<Object,Object> map = new java.util.HashMap<Object,Object>();
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("testPU", map);
+		EntityManager em = factory.createEntityManager();
+		em.getTransaction().begin();
+		// we'll put some codes here later
+		User2 u = new User2();
+		
+		u.setLogin("webservice-user");
+		u.setPassword("top secret");
+		em.persist(u);
+		//
+		em.getTransaction().commit();
+		em.close();
+		factory.close();
 		return "done";
 	}
 

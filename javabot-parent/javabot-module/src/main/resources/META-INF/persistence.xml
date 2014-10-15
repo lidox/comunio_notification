@@ -1,21 +1,26 @@
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0">
-
-	<persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
-		<class>de.as.javabot.comunio.entity.User2</class>
-		<class>de.as.javabot.comunio.User</class>
-		
-		<properties>
-			<property name="openjpa.ConnectionUserName" value="com" />
-			<property name="openjpa.ConnectionPassword" value="com" />
-			<property name="openjpa.ConnectionURL" value="jdbc:mysql://127.0.0.1/comunio" />
-			<property name="openjpa.ConnectionDriverName" value="com.mysql.jdbc.Driver" />
-			<property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema" />
-			<property name="openjpa.Log" value="SQL=TRACE" />
-			<property name="openjpa.ConnectionFactoryProperties" value="printParameters=true" />
-			<property name="openjpa.jdbc.MappingDefaults"
-				value="ForeignKeyDeleteAction=restrict,JoinForeignKeyDeleteAction=restrict" />
-		</properties>
-	</persistence-unit>
-
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+version="2.0">
+ 
+<persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
+<description>
+Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
+</description>
+<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>de.as.javabot.comunio.User2</class>
+ 
+<properties>
+<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/comunio" />
+<property name="javax.persistence.jdbc.user" value="com" />
+<property name="javax.persistence.jdbc.password" value="com" />
+ 
+<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+<property name="hibernate.show_sql" value="true" />
+<!--<property name="hibernate.hbm2ddl.auto" value="create" />-->
+</properties>
+ 
+</persistence-unit>
+ 
 </persistence>

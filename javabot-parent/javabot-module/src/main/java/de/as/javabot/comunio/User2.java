@@ -1,4 +1,4 @@
-package de.as.javabot.comunio.entity;
+package de.as.javabot.comunio;
 
 import java.io.Serializable;
 

@@ -5,10 +5,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import de.as.javabot.comunio.User;
+import de.as.javabot.comunio.User2;
 
 //@Ignore
 public class UserDaoImplTest {
@@ -38,14 +37,33 @@ public class UserDaoImplTest {
 //		
 //	}
 	
+//	@Test
+//	public void testCreateUser2() {
+//		java.util.Map<Object,Object> map = new java.util.HashMap<Object,Object>();
+//		EntityManagerFactory factory = Persistence.createEntityManagerFactory("testPU", map);
+//		EntityManager em = factory.createEntityManager();
+//		em.getTransaction().begin();
+//		// we'll put some codes here later
+//		User u = new User();
+//		
+//		u.setLogin("junit-user");
+//		u.setPassword("top secret");
+//		em.persist(u);
+//		//
+//		em.getTransaction().commit();
+//		em.close();
+//		factory.close();
+//		System.out.println();
+//	}
+	
 	@Test
-	public void testCreateUser2() {
+	public void testCreateUser2Hibernate() {
 		java.util.Map<Object,Object> map = new java.util.HashMap<Object,Object>();
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("testPU", map);
 		EntityManager em = factory.createEntityManager();
 		em.getTransaction().begin();
 		// we'll put some codes here later
-		User u = new User();
+		User2 u = new User2();
 		
 		u.setLogin("junit-user");
 		u.setPassword("top secret");

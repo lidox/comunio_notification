@@ -14,8 +14,8 @@ import javax.persistence.Table;
 /**
  * Representiert einen User-Account bei comunio
  */
-@Entity
-@NamedQueries({@NamedQuery(name = User.GET_BY_NAME, query = "SELECT u FROM user u where u.name = :name ")})
+//@Entity
+//@NamedQueries({@NamedQuery(name = User.GET_BY_NAME, query = "SELECT u FROM user u where u.name = :name ")})
 @Table(name = "user")
 public class User implements Serializable{
 
