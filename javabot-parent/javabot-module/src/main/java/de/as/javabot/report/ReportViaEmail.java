@@ -1,7 +1,5 @@
 package de.as.javabot.report;
 
-import javax.ejb.Asynchronous;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -46,6 +46,7 @@ public class TimeTest {
 
 		ArrayList<ComunioPlayer> list = bot.getInjuredPlayer();
 		StringBuilder msg = getInjuredPlayersAsString(user, list);
+		msg.toString();
 	}
 	
 	private StringBuilder getInjuredPlayersAsString(User user,

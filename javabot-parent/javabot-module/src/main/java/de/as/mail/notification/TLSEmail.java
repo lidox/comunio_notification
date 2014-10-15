@@ -42,7 +42,7 @@ public class TLSEmail {
     public String doMail(String msg, String mail){
         final String fromEmail = "lido.notification@gmail.com"; //requires valid gmail id
         final String password = "Segelohr7"; // correct password for gmail id
-        final String toEmail = "lido.artur@gmail.com"; // can be any email id
+        //final String toEmail = "lido.artur@gmail.com"; // can be any email id
          
         System.out.println("TLSEmail Start");
         Properties props = new Properties();

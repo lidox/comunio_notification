@@ -1,8 +1,5 @@
 package de.as.javabot.batch;
 
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -89,8 +86,6 @@ public class Trigger2 {
 					.forJob("job1", groupName).build();
 
 			scheduler.scheduleJob(job, trigger);
-			String stunde = "";
-			String minute = "";
 			return "Du bekommst jeden Tag eine Mail um "+h+":"+m+ " Uhr.";
 		}catch (SchedulerException e3) {
 			return e3.getMessage();

@@ -15,18 +15,18 @@ import javax.persistence.Table;
  * Representiert einen User-Account bei comunio
  */
 @Entity
-@NamedQueries({@NamedQuery(name = User.GET_BY_NAME, query = "SELECT u FROM user u where u.name = :userName ")})
-@Table(name = "comunio")
+@NamedQueries({@NamedQuery(name = User.GET_BY_NAME, query = "SELECT u FROM user u where u.name = :name ")})
+@Table(name = "user")
 public class User implements Serializable{
 
-	public static final String GET_BY_NAME = "Merchant.findAll";
+	public static final String GET_BY_NAME = "User.getUserByName";
 	
 	private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
 	private Integer id;
-    @Column(name = "login")
+    @Column(name = "name")
 	private String login;
     @Column(name = "password")
 	private String password;
@@ -36,8 +36,7 @@ public class User implements Serializable{
 		this.password = password;
 	}
 	
-	public User(){
-	}
+	public User(){}
 	
 	public String getLogin() {
 		return login;
@@ -50,6 +49,13 @@ public class User implements Serializable{
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String toString(){

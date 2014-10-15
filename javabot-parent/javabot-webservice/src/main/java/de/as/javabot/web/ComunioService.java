@@ -4,6 +4,9 @@ import java.time.LocalTime;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +41,25 @@ public class ComunioService implements IComunioWS {
 		User user = new User(login, password);
 
 		return JobExecuter.addJob(user, report);
+	}
+	
+	@WebMethod
+	public String doit(String s){
+//		java.util.Map<Object,Object> map = new java.util.HashMap<Object,Object>();
+//		EntityManagerFactory factory = Persistence.createEntityManagerFactory("testPU", map);
+//		EntityManager em = factory.createEntityManager();
+//		em.getTransaction().begin();
+//		// we'll put some codes here later
+//		User u = new User();
+//		
+//		u.setLogin("junit-user");
+//		u.setPassword("top secret");
+//		em.persist(u);
+//		//
+//		em.getTransaction().commit();
+//		em.close();
+//		factory.close();
+		return "done";
 	}
 
 }

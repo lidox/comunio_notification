@@ -1,13 +1,5 @@
 package de.as.javabot.main;
 
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-
-import de.as.javabot.batch.Trigger2;
-import de.as.javabot.bots.CommunioClientBot;
-import de.as.javabot.configuration.CommunioConfig;
-import de.as.javabot.configuration.Configuration;
-import de.as.mail.notification.MailNotificator;
-import de.as.mail.notification.SendMail;
 
 
 public class Main {
