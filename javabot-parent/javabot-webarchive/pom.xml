@@ -14,4 +14,29 @@
 			<artifactId>javabot-webservice</artifactId>
 		</dependency>
 	</dependencies>
+ <build>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.2</version>
+            <executions>
+              <execution>
+                <id>runbatchfile</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <executable>D:\Users\A543414\git\javabot\javabot-parent\javabot-webarchive\src\main\resources\hotdeploy\deploy.bat</executable>
+            </configuration>
+          </plugin>
+        </plugins>
+	</build>
+	<!-- <build> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+		<artifactId>maven-war-plugin</artifactId> <version>2.4</version> <configuration> 
+		<webappDirectory>A:/Projekte/lidoserver/jboss/standalone/deployments</webappDirectory> 
+		</configuration> </plugin> </plugins> </build> -->
 </project>

@@ -4,9 +4,6 @@ import java.time.LocalTime;
 
 import javax.jws.WebMethod;
 import javax.jws.WebService;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +12,9 @@ import de.as.javabot.batch.JobExecuter;
 import de.as.javabot.batch.TriggerDaily;
 import de.as.javabot.batch.TriggerPeriod;
 import de.as.javabot.comunio.User;
-import de.as.javabot.comunio.User2;
 import de.as.javabot.report.Report;
 import de.as.javabot.report.ReportViaEmail;
+import de.as.javabot.report.ReportViaWhatsApp;
 import de.as.javabot.web.interfaces.IComunioWS;
 
 @WebService
@@ -45,22 +42,9 @@ public class ComunioService implements IComunioWS {
 	}
 	
 	@WebMethod
-	public String doit(String s){
-		java.util.Map<Object,Object> map = new java.util.HashMap<Object,Object>();
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("testPU", map);
-		EntityManager em = factory.createEntityManager();
-		em.getTransaction().begin();
-		// we'll put some codes here later
-		User2 u = new User2();
-		
-		u.setLogin("webservice-user");
-		u.setPassword("top secret");
-		em.persist(u);
-		//
-		em.getTransaction().commit();
-		em.close();
-		factory.close();
-		return "done";
+	public String sentWhatsappMessage(String number, String message){
+		Report report = new ReportViaWhatsApp(true, number);
+		return report.sentMessage(message);	
 	}
 
 }

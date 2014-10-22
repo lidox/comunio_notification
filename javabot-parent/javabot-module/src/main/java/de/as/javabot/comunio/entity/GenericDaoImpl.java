@@ -18,7 +18,7 @@ public abstract class GenericDaoImpl<E> implements GenericDao<E> {
 	protected Class entityClass;
 
 	// dieser string steht in der persistence.xml
-	@PersistenceContext(unitName = "testPU")
+	@PersistenceContext(unitName = "de.as.javabot")
 	protected EntityManager em;
 
 	public void setEm(EntityManager em) {
@@ -40,7 +40,7 @@ public abstract class GenericDaoImpl<E> implements GenericDao<E> {
 	public E create(E t) {
 		return create(t, false);
 	}
-
+	
 	private E create(final E t, boolean flush) {
 		this.em.persist(t);
 		if (flush) {
@@ -49,11 +49,13 @@ public abstract class GenericDaoImpl<E> implements GenericDao<E> {
 		return t;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void delete(Object id) {
 		this.em.remove(this.em.getReference(entityClass, id));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public E find(Object id) {
 		return (E) this.em.find(entityClass, id);
@@ -115,11 +117,8 @@ public abstract class GenericDaoImpl<E> implements GenericDao<E> {
 			throw new Exception("The number of keyValue parameter shall not be odd.");
 		}
 
-		// search
-		// if (LOG.isDebugEnabled()) {
 		System.out.println("Search entity: [query=" + queryName + "|keys="
 				+ keys + "|values=" + values + "]");
-		// }
 		@SuppressWarnings("unchecked")
 		List<E> resutlList = query.getResultList();
 		if (resutlList == null || resutlList.size() == 0) {

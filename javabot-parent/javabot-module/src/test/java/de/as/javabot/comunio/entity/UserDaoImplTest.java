@@ -5,11 +5,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import de.as.javabot.comunio.User2;
 
-//@Ignore
+@Ignore
 public class UserDaoImplTest {
 
 	private static EntityManager em = null;

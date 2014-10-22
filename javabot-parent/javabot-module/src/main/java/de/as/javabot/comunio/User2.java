@@ -10,9 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+//@NamedQueries({@NamedQuery(name = User.GET_BY_NAME, query = "SELECT u FROM user u where u.login = :name ")})
 @Table(name = "user")
 public class User2 implements Serializable{
 
+	public static final String GET_BY_NAME = "User2.getUserByName";
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -43,6 +45,12 @@ public class User2 implements Serializable{
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String toString(){
+		StringBuilder ret = new StringBuilder();
+		ret.append("Username: "+getLogin()+" ");
+		ret.append("Password: "+getPassword().substring(0,1)+"**********");
+		return ret.toString();
 	}
     
     

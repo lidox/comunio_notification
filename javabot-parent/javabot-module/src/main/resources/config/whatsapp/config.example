@@ -1,0 +1,31 @@
+######## Yowsup Configuration file #####################
+# Lines are commented using # and ;
+# Your configuration should contain info about your login credentials to Whatsapp. This typically consist of 3 fields:\n
+# cc:		Your country code. See http://www.ipipi.com/help/telephone-country-codes.htm
+#		If not set, it will be autodetected from phonenumber
+# phone:	Your full phone number including country code, without '+' or '00'
+# id:		This field is used in registration calls (-r|-R|-e), and for login if you are trying to use an existing account that is setup
+#		on a physical device. Whatsapp has recently deprecated using IMEI/MAC to generate the account's password in updated versions
+#		of their clients. Use --v1 switch to try it anyway. Typically this field should contain the phone's IMEI if your account is setup on
+#		a Nokia or an Android device, or the phone's WLAN's MAC Address for iOS devices. If you are not trying to use existing credentials
+#		or want to register, you can leave this field blank or set it to some random text.
+# password:	Password to use for login. You obtain this password when you register using Yowsup.
+######################################################
+
+## Actual config starts below ##
+
+cc=49 #if not specified it will be autodetected
+phone=491754504001
+id=
+password=8WY24JAb2P6QN8avvoGSpOCHWcU=
+
+### INSTALLATION: 
+### 1. Python 2.6++ installieren (war bei mir drauf)
+### 2. apt-get install python-dateutil
+### 3. Yusum packet in ein verzeichnis kopieren! z.B. /middle/whatsapp/src (hier drin liegt dann: Examples und Yowsup) 
+### 4. cd /middle/whatsapp/src
+### 5. PYTHONPATH="/middle/whatsapp/src"
+### 6. export PYTHONPATH
+
+### QUELLE: http://xebee.xebia.in/index.php/2013/11/25/yowsup-the-whatsapp-api/
+### QUELLE2: http://www.timo.in/whatsapp-nachrichten-ueber-kommandozeile-verschicken/
