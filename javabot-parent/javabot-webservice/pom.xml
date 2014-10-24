@@ -8,24 +8,74 @@
 	</parent>
 	<artifactId>javabot-webservice</artifactId>
 	<dependencies>
-		<!-- webservice dependencies beginning -->
+		<!-- for ejb container in JUnit tests -->
 		<dependency>
 			<groupId>org.apache.openejb</groupId>
-			<artifactId>openejb-cxf</artifactId>
-			<!-- <version>5.0.0-SNAPSHOT</version> -->
-			<version>4.6.0.2</version>
+			<artifactId>openejb-server</artifactId>
+			<version>4.7.0</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>javax.ejb-api</artifactId>
+			<version>3.2</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- neede for JPA -->
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>6.0</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- for Logging -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.31</version>
+		</dependency>
+
+		<!-- for JUnit tests -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- webservice dependencies ending -->
+
+		<dependency>
+			<groupId>org.apache.openejb</groupId>
+			<artifactId>openejb-api</artifactId>
+			<version>4.6.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.2.12.Final</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>javabot-parent</groupId>
 			<artifactId>javabot-module</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

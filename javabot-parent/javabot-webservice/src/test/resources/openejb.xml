@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openejb>
+	<Resource id="GCS_DS_JTA" type="DataSource">
+		JdbcDriver = com.mysql.jdbc.Driver
+		JdbcUrl = jdbc:mysql://localhost:3306/comunio?characterEncoding=UTF-8
+		UserName =root
+		Password =
+		InitialSize = 3
+		MaxActive = 20
+		PoolPreparedStatements = true
+		MaxOpenPreparedStatements = 256
+		JtaManaged=true
+	</Resource>
+	<Resource id="GCS_DS" type="DataSource">
+		JdbcDriver =com.mysql.jdbc.Driver
+		JdbcUrl = jdbc:mysql://localhost:3306/comunio?characterEncoding=UTF-8
+		UserName = root
+		Password =
+		InitialSize = 3
+		MaxActive = 20
+		PoolPreparedStatements = true
+		MaxOpenPreparedStatements = 256
+		JtaManaged=false
+	</Resource>
+
+	<Container id="statelessContainer" type="STATELESS">
+		MinSize = 0
+	</Container>
+
+	<Container id="statefulContainer" type="STATEFUL">
+	</Container>
+
+</openejb>

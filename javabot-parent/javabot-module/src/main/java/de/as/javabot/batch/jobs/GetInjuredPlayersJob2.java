@@ -44,7 +44,7 @@ public class GetInjuredPlayersJob2 implements Job {
 			report.sentMessage(msg.toString());
 			
 			//TODO: hier ein test
-			addParam(context, "test", "this is a amazing test! :)");
+			addParamToJobContext(context, "test", "this is a amazing test! :)");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -92,7 +92,7 @@ public class GetInjuredPlayersJob2 implements Job {
 		return context.getScheduler().getContext().get(key);
 	}
 
-	private void addParam(JobExecutionContext context, String key, Object value) {
+	private void addParamToJobContext(JobExecutionContext context, String key, Object value) {
 		JobDataMap data = context.getJobDetail().getJobDataMap();
 		data.put(key, value);
 	}
