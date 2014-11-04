@@ -1,5 +1,8 @@
 package de.as.javabot.batch;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -19,82 +22,124 @@ import de.as.javabot.report.Report;
 @Startup
 public class JobExecuter {
 
-	private static Logger LOG = LoggerFactory.getLogger(JobExecuter.class);
-	private static Scheduler SCHEDULER;
-	private static TriggerPeriod jobPeriod;
-	private static Class<?> jobClass;
-	
-	public JobExecuter() {
-		try {
-			SCHEDULER = new StdSchedulerFactory().getScheduler();
-			SCHEDULER.start();
-			LOG.info("+++ daily schedular instance is ready +++");
-		} catch (SchedulerException e) {
-			LOG.error("Could not load daily schedular instance.");
-			e.printStackTrace();
-		}
-	}
-	
-	public static void addTriggerAndJob(TriggerPeriod jobPeriode,String jobClassName){
-		jobClass = getClass(jobClassName);
-		jobPeriod = jobPeriode;
-	}
+   private static Logger LOG = LoggerFactory.getLogger(JobExecuter.class);
+   private static Scheduler SCHEDULER;
+   private static ArrayList<TriggerPeriod> triggerList = new ArrayList<TriggerPeriod>();
+   private static TriggerPeriod jobPeriod;
+   private static Class<?> jobClass;
 
-	/**
-	 * Add or remove job from trigger
-	 * @param user
-	 * @param r
-	 * @return
-	 */
-	public static String addJob(User user, Report r) {
-		if(r.isActive()){
-			return addJobToSchedular(user, jobPeriod.getJobName(), jobClass, r);
-		}
-		return unscheduleJob(jobPeriod);
-	}
+   public JobExecuter() {
+      try {
+         SCHEDULER = new StdSchedulerFactory().getScheduler();
+         SCHEDULER.start();
+         LOG.info("     _       _ _            _       _          ");
+         LOG.info("    | |     (_) |          (_)     | |         ");
+         LOG.info("    | | ____ _| |_   _      _  ___ | | _   ___ ");
+         LOG.info(" / || |/ _  | | | | | |    | |/ _ \\| || \\ /___)");
+         LOG.info("( (_| ( ( | | | | |_| |    | | |_| | |_) )___ |");
+         LOG.info(" \\____|\\_||_|_|_|\\__  |   _| |\\___/|____/(___/ ");
+         LOG.info("                (____/   (__/  +++ daily schedular ready +++");
+         LOG.info(" ");
+      } catch (SchedulerException e) {
+         LOG.error("Could not load daily schedular instance.");
+         e.printStackTrace();
+      }
+   }
 
-	/**
-	 * Remove job from schedular
-	 * @param user
-	 * @param jobName
-	 * @param r
-	 * @return
-	 */
-	public static String unscheduleJob(TriggerPeriod jobPeriod) {
-		try {
-			SCHEDULER.unscheduleJob(TriggerKey.triggerKey(jobPeriod.getJobName(),
-					jobPeriod.getJobName()));
-			return "Die taegliche Service Mail an: "+jobPeriod.getJobName()+" wurde deaktiviert!";
-		} catch (SchedulerException e) {
-			e.printStackTrace();
-			return e.getMessage();
-		}
-	}
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static String addJobToSchedular(User user, String jobName, Class clazz, Report report) {
-		try {
-			JobDetail job = JobBuilder.newJob(clazz)
-					.withIdentity(jobName, jobPeriod.getGroupName()).build();
+   /**
+    * Add or remove job from trigger and send message about
+    * activation/deactivation
+    * 
+    * @param user
+    * @param report
+    * @return
+    */
+   public static String addJob(User user, Report report, LocalTime time,
+         String jobClassName) {
+      jobClass = getClass(jobClassName);
+      String jobName = report.getAddress();
+      String groupName = user.getLogin();
+     
+      jobPeriod = new TriggerDaily(jobName, groupName, time);
+      //TODO: kann nicht funktionieren!
 
-			SCHEDULER.getContext().put("user", user);
-			SCHEDULER.getContext().put("report", report);	
-			
-			SCHEDULER.scheduleJob(job, jobPeriod.getPeriod());
-			
-			return "Du bekommst eine Nachricht um 'unkown hard coded' Uhr.";
-		} catch (SchedulerException e3) {
-			return e3.getMessage();
-		}
-	}
-	
-	@SuppressWarnings("rawtypes")
-	private static Class getClass(String jobClassName) {
-		try {
-			return Class.forName(jobClassName);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
+      if (report.isActive()) {
+         LOG.info("Der user "+user.toString()+" hat eine teagliche Benachrichtigung um "+time.toString() +" angefordert!"
+               + " JobName="+jobName+" und GroupName="+groupName + " an: "+report.getAddress());
+         return addJobToSchedular(user, jobClass, report, time);
+      }
+      LOG.info("Der user "+user.toString()+" hat die teagliche Benachrichtigung deaktiviert!"
+            + " JobName="+jobName+" und GroupName="+groupName + " an: "+report.getAddress());
+      return unscheduleJob(jobName, groupName, report);
+   }
+
+   /**
+    * Remove job from schedular
+    * 
+    * @param jobName
+    * @param groupName
+    * @param report
+    * @return
+    */
+   public static String unscheduleJob(String jobName, String groupName,
+         Report report) {
+      try {
+         SCHEDULER.unscheduleJob(TriggerKey.triggerKey(jobName, groupName));
+         report.sentMessage("Du bekommst absofort keine automatische Benachrichtigung mehr.");
+         return "Die automatische Benachrichtigung an: " + jobName
+               + " wurde deaktiviert!";
+      } catch (SchedulerException e) {
+         report.sentMessage("Beim Abschalten der automatischen Benachrichtigung ist ein Fehler aufgetretten: "
+               + e.getMessage());
+         return e.getMessage();
+      }
+   }
+
+   @SuppressWarnings({ "rawtypes", "unchecked" })
+   private static String addJobToSchedular(User user,
+         Class clazz, Report report, LocalTime time) {
+      try {
+         JobDetail job = JobBuilder.newJob(clazz)
+               .withIdentity(jobPeriod.getJobName(), jobPeriod.getGroupName()).build();
+
+         SCHEDULER.getContext().put("user", user);
+         SCHEDULER.getContext().put("report", report);
+
+         SCHEDULER.scheduleJob(job, jobPeriod.getPeriod());
+         
+         //TODO: hier asynchron besser
+         report.sentMessage("Du bekommst absofort automatisch Benachrichtigungen von mir.");
+         
+         return "Du bekommst taeglich eine Nachricht um "+time.toString() +" Uhr.";
+      } catch (SchedulerException e3) {
+         report.sentMessage("Du bekommst keine Benachrichtigungen, weil ein Fehler aufgetretten ist:"
+               + e3.getMessage());
+         return e3.getMessage();
+      }
+   }
+
+   @SuppressWarnings("rawtypes")
+   private static Class getClass(String jobClassName) {
+      try {
+         return Class.forName(jobClassName);
+      } catch (ClassNotFoundException e) {
+         e.printStackTrace();
+         return null;
+      }
+   }
+   
+   public static String getJobStatistics(){
+      StringBuilder ret = new StringBuilder();
+      try {
+         ret.append("JobNames: "+SCHEDULER.getJobGroupNames().toString()+"\n");
+         ret.append("TriggerGroups: "+SCHEDULER.getTriggerGroupNames().toString()+"\n");
+         ret.append("SchedulerName: "+SCHEDULER.getSchedulerName()+"\n");
+         ret.append("TriggerDescription: "+jobPeriod.getPeriod().getDescription()+"\n");
+         LOG.info(ret.toString());
+         return ret.toString();
+      } catch (SchedulerException e) {
+         e.printStackTrace();
+      }
+      return "Fehler bei der Ermittlung der Statistik!";
+   }
 }
